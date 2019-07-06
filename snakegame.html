@@ -1,0 +1,81 @@
+<div id="score">Score:0</div><canvas id="snakecanv" width="400" height="400"></canvas>
+<script>
+window.onload=function() {
+    canv=document.getElementById("snakecanv");
+    ctxt=canv.getContext("2d");
+    document.addEventListener("keydown",changedirection);
+    setInterval(snakegame,100);
+}
+
+hdx=hdy=10;
+gmsk=20;
+fg=20;
+ax=ay=15;
+xv=yv=0;
+trail=[];
+tail=5;
+
+score=0;
+
+function snakegame(){
+    hdx+=xv;
+    hdy+=yv;
+    if(hdx<0){
+        hdx=fg-1;
+    }
+    if(hdx>fg-1){
+        hdx=0;
+    }
+    if(hdy<0){
+        hdy=fg-1;
+    }
+    if(hdy>fg-1){
+        hdy=0;
+    }
+    ctxt.fillStyle="blue";
+    ctxt.fillRect(0,0,canv.width,canv.height);
+    
+    ctxt.fillStyle="yellow";
+    for(var i=0;i<trail.length;i++){
+        ctxt.fillRect(trail[i].x*gmsk,trail[i].y*gmsk,gmsk-2,gmsk-2);
+        if(trail[i].x==hdx && trail[i].y==hdy){
+            tail =5;
+        }
+    }
+    
+    trail.push({x:hdx,y:hdy});
+    while(trail.length>tail){
+        trail.shift();
+    }
+    
+    if(ax==hdx && ay==hdy){
+            tail++;
+            
+            score += 10;    
+            document.getElementById('score').innerHTML = "Score:" + score;
+            
+            ax=Math.floor(Math.random()*fg);
+            ay=Math.floor(Math.random()*fg);
+        }
+    
+    ctxt.fillStyle="red";
+    ctxt.fillRect(ax*gmsk,ay*gmsk,gmsk-2,gmsk-2);
+}
+
+function changedirection(evt){
+    switch(evt.keyCode){
+        case 37:
+            xv=-1;yv=0;
+            break;
+        case 38:
+            xv=0;yv=-1;
+            break;
+        case 39:
+            xv=1;yv=0;
+            break;
+        case 40:
+            xv=0;yv=1;
+            break;
+    }
+}
+</script>
